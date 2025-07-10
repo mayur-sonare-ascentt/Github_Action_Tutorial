@@ -1,0 +1,63 @@
+# Sample github action for deploying a node project
+name: Deployment Workflow
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Load code
+        uses: actions/checkout@v3
+      
+      - name: Install node js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          
+      - name: Install dependecies
+        run: npm ci
+        
+      - name: Lint
+        run: npm run lint
+
+  test:
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Load code
+        uses: actions/checkout@v3
+      
+      - name: Install node js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          
+      - name: Install dependecies
+        run: npm ci
+        
+      - name: Test
+        run: npm run test
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Load code
+        uses: actions/checkout@v3
+      
+      - name: Install node js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          
+      - name: Install dependecies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+        
+      - name: Deploy
+        run: echo "Deploying ..."
